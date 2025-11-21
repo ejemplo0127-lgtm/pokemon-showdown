@@ -6493,7 +6493,7 @@ export const Pokedex: import("../sim/dex-species").SpeciesDataTable = {
     baseSpecies: "Camerupt",
     forme: "Mega",
     types: ["Fire", "Ground"],
-    baseStats: { hp: 70, atk: 120, def: 100, spa: 145, spd: 105, spe: 20 },
+    baseStats: { hp: 70, atk: 120, def: 100, spa: 135, spd: 105, spe: 30 },
     abilities: { 0: "Sheer Force" },
     heightm: 2.5,
     weightkg: 320.5,
