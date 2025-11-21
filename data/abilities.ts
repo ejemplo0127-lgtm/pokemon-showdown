@@ -257,6 +257,40 @@ export const Abilities: import("../sim/dex-abilities").AbilityDataTable = {
     rating: 4,
     num: -1003,
   },
+  pielhelada: {
+    onModifyTypePriority: -1,
+    onModifyType(move, pokemon) {
+      const noModifyType = [
+        "judgment",
+        "multiattack",
+        "naturalgift",
+        "revelationdance",
+        "technoblast",
+        "terrainpulse",
+        "weatherball",
+      ];
+      if (
+        move.type === "Normal" &&
+        (!noModifyType.includes(move.id) || this.activeMove?.isMax) &&
+        !(move.isZ && move.category !== "Status") &&
+        !(move.name === "Tera Blast" && pokemon.terastallized)
+      ) {
+        move.type = "Ice";
+        move.typeChangerBoosted = this.effect;
+      }
+    },
+    onBasePowerPriority: 23,
+    onBasePower(basePower, pokemon, target, move) {
+      if (move.typeChangerBoosted === this.effect)
+        return this.chainModify([4915, 4096]);
+    },
+    flags: {},
+    name: "Piel Helada",
+    shortDesc:
+      "Transforma los movimientos de tipo normal en hielo y los potencia un 20%",
+    rating: 4,
+    num: -1006,
+  },
   pielherbacea: {
     onModifyTypePriority: -1,
     onModifyType(move, pokemon) {

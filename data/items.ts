@@ -2,14 +2,182 @@ export const Items: import("../sim/dex-items").ItemDataTable = {
   // Pokemon Añil
   flappletunita: {
     name: "Flappletunita",
-    spritenum: 576, // puedes usar cualquiera, es solo el ícono
-    megaStone: "Flapple-Gmax", // o Appletun-Gmax, o tu nueva forma
-    megaEvolves: "Flapple", // Pokémon que puede megaevolucionar con este ítem
-    itemUser: ["Flapple"],
+    spritenum: 576,
+    itemUser: ["Flapple", "Appletun"],
     onTakeItem: false,
-    num: -2001, // número negativo para custom items
+    num: -2001,
+    gen: 9,
+
+    // === Esto decide a qué forma megaevoluciona cada Pokémon ===
+    onSwitchIn(pokemon) {
+      if (pokemon.baseSpecies.baseSpecies === "Flapple") {
+        pokemon.canMegaEvo = "Flapple-Gmax";
+      } else if (pokemon.baseSpecies.baseSpecies === "Appletun") {
+        pokemon.canMegaEvo = "Appletun-Gmax";
+      }
+    },
+  },
+  machampita: {
+    name: "Machampita",
+    spritenum: 576,
+    megaStone: "Machamp-Gmax",
+    megaEvolves: "Machamp",
+    itemUser: ["Machamp"],
+    onTakeItem: false,
+    num: -2002,
     gen: 9,
   },
+  kinglerita: {
+    name: "Kinglerita",
+    spritenum: 576,
+    megaStone: "Kingler-Gmax",
+    megaEvolves: "Kingler",
+    itemUser: ["Kingler"],
+    onTakeItem: false,
+    num: -2003,
+    gen: 9,
+  },
+  laprasita: {
+    name: "Laprasita",
+    spritenum: 576,
+    megaStone: "Lapras-Gmax",
+    megaEvolves: "Lapras",
+    itemUser: ["Lapras"],
+    onTakeItem: false,
+    num: -2004,
+    gen: 9,
+  },
+  garbodorita: {
+    name: "Garbodorita",
+    spritenum: 576,
+    megaStone: "Garbodor-Gmax",
+    megaEvolves: "Garbodor",
+    itemUser: ["Garbodor"],
+    onTakeItem: false,
+    num: -2005,
+    gen: 9,
+  },
+  corviknightita: {
+    name: "Corviknightita",
+    spritenum: 576,
+    megaStone: "Corviknight-Gmax",
+    megaEvolves: "Corviknight",
+    itemUser: ["Corviknight"],
+    onTakeItem: false,
+    num: -2006,
+    gen: 9,
+  },
+  orbeetleita: {
+    name: "Orbeetleita",
+    spritenum: 576,
+    megaStone: "Orbeetle-Gmax",
+    megaEvolves: "Orbeetle",
+    itemUser: ["Orbeetle"],
+    onTakeItem: false,
+    num: -2007,
+    gen: 9,
+  },
+  drednawita: {
+    name: "Drednawita",
+    spritenum: 576,
+    megaStone: "Drednaw-Gmax",
+    megaEvolves: "Drednaw",
+    itemUser: ["Drednaw"],
+    onTakeItem: false,
+    num: -2008,
+    gen: 9,
+  },
+  coalossalita: {
+    name: "Coalossalita",
+    spritenum: 576,
+    megaStone: "Coalossal-Gmax",
+    megaEvolves: "Coalossal",
+    itemUser: ["Coalossal"],
+    onTakeItem: false,
+    num: -2009,
+    gen: 9,
+  },
+  sandacondita: {
+    name: "Sandacondita",
+    spritenum: 576,
+    megaStone: "Sandaconda-Gmax",
+    megaEvolves: "Sandaconda",
+    itemUser: ["Sandaconda"],
+    onTakeItem: false,
+    num: -2010,
+    gen: 9,
+  },
+  toxtricitita: {
+    name: "Toxtricitita",
+    spritenum: 576,
+    megaStone: "Toxtricity-Gmax",
+    megaEvolves: "Toxtricity",
+    itemUser: ["Toxtricity"],
+    onTakeItem: false,
+    num: -2011,
+    gen: 9,
+  },
+  centiskorchita: {
+    name: "Centiskorchita",
+    spritenum: 576,
+    megaStone: "Centiskorch-Gmax",
+    megaEvolves: "Centiskorch",
+    itemUser: ["Centiskorch"],
+    onTakeItem: false,
+    num: -2012,
+    gen: 9,
+  },
+  hatterenita: {
+    name: "Hatterenita",
+    spritenum: 576,
+    megaStone: "Hatterene-Gmax",
+    megaEvolves: "Hatterene",
+    itemUser: ["Hatterene"],
+    onTakeItem: false,
+    num: -2013,
+    gen: 9,
+  },
+  grimmsnarlita: {
+    name: "Grimmsnarlita",
+    spritenum: 576,
+    megaStone: "Grimmsnarl-Gmax",
+    megaEvolves: "Grimmsnarl",
+    itemUser: ["Grimmsnarl"],
+    onTakeItem: false,
+    num: -2014,
+    gen: 9,
+  },
+  alcremita: {
+    name: "Alcremita",
+    spritenum: 576,
+    megaStone: "Alcremie-Gmax",
+    megaEvolves: "Alcremie",
+    itemUser: ["Alcremie"],
+    onTakeItem: false,
+    num: -2015,
+    gen: 9,
+  },
+  copperajita: {
+    name: "Copperajita",
+    spritenum: 576,
+    megaStone: "Copperajah-Gmax",
+    megaEvolves: "Copperajah",
+    itemUser: ["Copperajah"],
+    onTakeItem: false,
+    num: -2016,
+    gen: 9,
+  },
+  duraludonita: {
+    name: "Duraludonita",
+    spritenum: 576,
+    megaStone: "Duraludon-Gmax",
+    megaEvolves: "Duraludon",
+    itemUser: ["Duraludon"],
+    onTakeItem: false,
+    num: -2017,
+    gen: 9,
+  },
+
   appletunita: {
     name: "Appletunita",
     spritenum: 576, // puedes usar cualquiera, es solo el ícono
@@ -17,7 +185,7 @@ export const Items: import("../sim/dex-items").ItemDataTable = {
     megaEvolves: "Appletun", // Pokémon que puede megaevolucionar con este ítem
     itemUser: ["Appletun"],
     onTakeItem: false,
-    num: -2003, // número negativo para custom items
+    num: -2018, // número negativo para custom items
     gen: 9,
   },
   butterfreeita: {
@@ -27,7 +195,7 @@ export const Items: import("../sim/dex-items").ItemDataTable = {
     megaEvolves: "Butterfree", // Pokémon que puede megaevolucionar con este ítem
     itemUser: ["Butterfree"],
     onTakeItem: false,
-    num: -2002, // número negativo para custom items
+    num: -2019, // número negativo para custom items
     gen: 9,
   },
   abilityshield: {
