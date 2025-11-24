@@ -18,7 +18,7 @@ export const Moves: import("../sim/dex-moves").MoveDataTable = {
     type: "Electric",
     contestType: "Cool",
   },
-  atrapamoscas: {
+  atrapabicho: {
     num: 1104,
     accuracy: 100,
     basePower: 90,
@@ -66,7 +66,7 @@ export const Moves: import("../sim/dex-moves").MoveDataTable = {
     },
     category: "Physical",
     isNonstandard: "Past",
-    name: "amorpostumo",
+    name: "Amor postumo",
     pp: 20,
     priority: 0,
     flags: { contact: 1, protect: 1, mirror: 1, metronome: 1 },
