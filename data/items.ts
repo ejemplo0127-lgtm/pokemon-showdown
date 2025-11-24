@@ -178,7 +178,7 @@ export const Items: import("../sim/dex-items").ItemDataTable = {
     gen: 9,
   },
 
-  appletunita: {
+  /*appletunita: {
     name: "Appletunita",
     spritenum: 576, // puedes usar cualquiera, es solo el ícono
     megaStone: "Appletun-Gmax", // o Appletun-Gmax, o tu nueva forma
@@ -187,7 +187,7 @@ export const Items: import("../sim/dex-items").ItemDataTable = {
     onTakeItem: false,
     num: -2018, // número negativo para custom items
     gen: 9,
-  },
+  },*/
   butterfreeita: {
     name: "Butterfreeita",
     spritenum: 577, // puedes usar cualquiera, es solo el ícono

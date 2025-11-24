@@ -18,6 +18,65 @@ export const Moves: import("../sim/dex-moves").MoveDataTable = {
     type: "Electric",
     contestType: "Cool",
   },
+  atrapamoscas: {
+    num: 1104,
+    accuracy: 100,
+    basePower: 90,
+    category: "Physical",
+    name: "Atrapabicho",
+    pp: 20,
+    priority: 0,
+    flags: { protect: 1, mirror: 1, metronome: 1 },
+    onEffectiveness(typeMod, target, type) {
+      if (type === "Bug") return 1;
+    },
+    target: "normal",
+    type: "Grass",
+    contestType: "Beautiful",
+  },
+  triplegolpe: {
+    num: 1103,
+    accuracy: 100,
+    basePower: 15,
+    category: "Physical",
+    name: "Triple Dive",
+    pp: 10,
+    priority: 0,
+    flags: { contact: 1, protect: 1, mirror: 1, metronome: 1 },
+    multihit: 3,
+    onBasePower(basePower, source, target, move) {
+      // move.hit = 1, 2 o 3 dependiendo del golpe
+      if (move.hit === 2) {
+        return this.chainModify(2); // 20 × 2 = 40
+      }
+      if (move.hit === 3) {
+        return this.chainModify(3); // 20 × 3 = 60
+      }
+    },
+    secondary: null,
+    target: "normal",
+    type: "Normal",
+  },
+  amorpostumo: {
+    num: 1102,
+    accuracy: 100,
+    basePower: 0,
+    basePowerCallback(pokemon) {
+      return Math.floor((pokemon.happiness * 10) / 25) || 1;
+    },
+    category: "Physical",
+    isNonstandard: "Past",
+    name: "amorpostumo",
+    pp: 20,
+    priority: 0,
+    flags: { contact: 1, protect: 1, mirror: 1, metronome: 1 },
+    secondary: null,
+    target: "normal",
+    type: "Ghost",
+    zMove: { basePower: 160 },
+    maxMove: { basePower: 130 },
+    contestType: "Cute",
+  },
   escalofrio: {
     num: 1100,
     accuracy: 85,
@@ -60,7 +119,7 @@ export const Moves: import("../sim/dex-moves").MoveDataTable = {
   absorb: {
     num: 71,
     accuracy: 100,
-    basePower: 20,
+    basePower: 30,
     category: "Special",
     name: "Absorb",
     pp: 25,
@@ -308,7 +367,7 @@ export const Moves: import("../sim/dex-moves").MoveDataTable = {
   airslash: {
     num: 403,
     accuracy: 95,
-    basePower: 75,
+    basePower: 70,
     category: "Special",
     name: "Air Slash",
     pp: 15,
@@ -582,7 +641,7 @@ export const Moves: import("../sim/dex-moves").MoveDataTable = {
   aquatail: {
     num: 401,
     accuracy: 90,
-    basePower: 90,
+    basePower: 95,
     category: "Physical",
     name: "Aqua Tail",
     pp: 10,
@@ -615,7 +674,7 @@ export const Moves: import("../sim/dex-moves").MoveDataTable = {
   armthrust: {
     num: 292,
     accuracy: 100,
-    basePower: 15,
+    basePower: 20,
     category: "Physical",
     name: "Arm Thrust",
     pp: 20,
@@ -944,7 +1003,7 @@ export const Moves: import("../sim/dex-moves").MoveDataTable = {
   aurorabeam: {
     num: 62,
     accuracy: 100,
-    basePower: 65,
+    basePower: 80,
     category: "Special",
     name: "Aurora Beam",
     pp: 20,
@@ -1382,7 +1441,7 @@ export const Moves: import("../sim/dex-moves").MoveDataTable = {
   belch: {
     num: 562,
     accuracy: 90,
-    basePower: 120,
+    basePower: 130,
     category: "Special",
     name: "Belch",
     pp: 10,
@@ -1672,7 +1731,7 @@ export const Moves: import("../sim/dex-moves").MoveDataTable = {
   blazekick: {
     num: 299,
     accuracy: 90,
-    basePower: 85,
+    basePower: 90,
     category: "Physical",
     name: "Blaze Kick",
     pp: 10,
@@ -1963,7 +2022,7 @@ export const Moves: import("../sim/dex-moves").MoveDataTable = {
   bounce: {
     num: 340,
     accuracy: 85,
-    basePower: 85,
+    basePower: 90,
     category: "Physical",
     name: "Bounce",
     pp: 5,
@@ -2798,7 +2857,7 @@ export const Moves: import("../sim/dex-moves").MoveDataTable = {
   chloroblast: {
     num: 835,
     accuracy: 95,
-    basePower: 150,
+    basePower: 130,
     category: "Special",
     name: "Chloroblast",
     pp: 5,
@@ -2833,7 +2892,7 @@ export const Moves: import("../sim/dex-moves").MoveDataTable = {
   clamp: {
     num: 128,
     accuracy: 85,
-    basePower: 35,
+    basePower: 50,
     category: "Physical",
     isNonstandard: "Past",
     name: "Clamp",
@@ -3791,7 +3850,7 @@ export const Moves: import("../sim/dex-moves").MoveDataTable = {
   cut: {
     num: 15,
     accuracy: 95,
-    basePower: 50,
+    basePower: 65,
     category: "Physical",
     isNonstandard: "Unobtainable",
     name: "Cut",
@@ -4311,7 +4370,7 @@ export const Moves: import("../sim/dex-moves").MoveDataTable = {
   dive: {
     num: 291,
     accuracy: 100,
-    basePower: 80,
+    basePower: 90,
     category: "Physical",
     name: "Dive",
     pp: 10,
@@ -4534,7 +4593,7 @@ export const Moves: import("../sim/dex-moves").MoveDataTable = {
   doubleshock: {
     num: 892,
     accuracy: 100,
-    basePower: 120,
+    basePower: 130,
     category: "Physical",
     name: "Double Shock",
     pp: 5,
@@ -4843,7 +4902,7 @@ export const Moves: import("../sim/dex-moves").MoveDataTable = {
   drainingkiss: {
     num: 577,
     accuracy: 100,
-    basePower: 50,
+    basePower: 60,
     category: "Special",
     name: "Draining Kiss",
     pp: 10,
@@ -4880,7 +4939,7 @@ export const Moves: import("../sim/dex-moves").MoveDataTable = {
   dreameater: {
     num: 138,
     accuracy: 100,
-    basePower: 100,
+    basePower: 110,
     category: "Special",
     name: "Dream Eater",
     pp: 15,
@@ -5386,7 +5445,7 @@ export const Moves: import("../sim/dex-moves").MoveDataTable = {
   ember: {
     num: 52,
     accuracy: 100,
-    basePower: 40,
+    basePower: 45,
     category: "Special",
     name: "Ember",
     pp: 25,
@@ -5786,7 +5845,7 @@ export const Moves: import("../sim/dex-moves").MoveDataTable = {
   fairywind: {
     num: 584,
     accuracy: 100,
-    basePower: 40,
+    basePower: 50,
     category: "Special",
     name: "Fairy Wind",
     pp: 30,
@@ -6745,7 +6804,7 @@ export const Moves: import("../sim/dex-moves").MoveDataTable = {
   flyingpress: {
     num: 560,
     accuracy: 95,
-    basePower: 100,
+    basePower: 80,
     category: "Physical",
     name: "Flying Press",
     pp: 10,
@@ -7009,7 +7068,7 @@ export const Moves: import("../sim/dex-moves").MoveDataTable = {
   freezedry: {
     num: 573,
     accuracy: 100,
-    basePower: 70,
+    basePower: 80,
     category: "Special",
     name: "Freeze-Dry",
     pp: 20,
@@ -7261,7 +7320,7 @@ export const Moves: import("../sim/dex-moves").MoveDataTable = {
   futuresight: {
     num: 248,
     accuracy: 100,
-    basePower: 120,
+    basePower: 130,
     category: "Special",
     name: "Future Sight",
     pp: 10,
@@ -7486,7 +7545,7 @@ export const Moves: import("../sim/dex-moves").MoveDataTable = {
   gigatonhammer: {
     num: 893,
     accuracy: 100,
-    basePower: 160,
+    basePower: 150,
     category: "Physical",
     name: "Gigaton Hammer",
     pp: 5,
@@ -10802,7 +10861,7 @@ export const Moves: import("../sim/dex-moves").MoveDataTable = {
   infestation: {
     num: 611,
     accuracy: 100,
-    basePower: 20,
+    basePower: 40,
     category: "Special",
     name: "Infestation",
     pp: 20,
@@ -10960,7 +11019,7 @@ export const Moves: import("../sim/dex-moves").MoveDataTable = {
   irontail: {
     num: 231,
     accuracy: 75,
-    basePower: 100,
+    basePower: 110,
     category: "Physical",
     name: "Iron Tail",
     pp: 15,
@@ -11349,7 +11408,7 @@ export const Moves: import("../sim/dex-moves").MoveDataTable = {
   lastresort: {
     num: 387,
     accuracy: 100,
-    basePower: 140,
+    basePower: 70,
     category: "Physical",
     name: "Last Resort",
     pp: 5,
@@ -12994,7 +13053,7 @@ export const Moves: import("../sim/dex-moves").MoveDataTable = {
   megadrain: {
     num: 72,
     accuracy: 100,
-    basePower: 40,
+    basePower: 55,
     category: "Special",
     name: "Mega Drain",
     pp: 15,
@@ -13120,7 +13179,7 @@ export const Moves: import("../sim/dex-moves").MoveDataTable = {
   metalclaw: {
     num: 232,
     accuracy: 95,
-    basePower: 50,
+    basePower: 60,
     category: "Physical",
     name: "Metal Claw",
     pp: 35,
@@ -13184,7 +13243,7 @@ export const Moves: import("../sim/dex-moves").MoveDataTable = {
   meteorbeam: {
     num: 800,
     accuracy: 90,
-    basePower: 120,
+    basePower: 130,
     category: "Special",
     name: "Meteor Beam",
     pp: 10,
@@ -13209,7 +13268,7 @@ export const Moves: import("../sim/dex-moves").MoveDataTable = {
   meteormash: {
     num: 309,
     accuracy: 90,
-    basePower: 90,
+    basePower: 100,
     category: "Physical",
     name: "Meteor Mash",
     pp: 10,
@@ -14021,7 +14080,7 @@ export const Moves: import("../sim/dex-moves").MoveDataTable = {
   mudslap: {
     num: 189,
     accuracy: 100,
-    basePower: 20,
+    basePower: 35,
     category: "Special",
     name: "Mud-Slap",
     pp: 10,
@@ -14580,7 +14639,7 @@ export const Moves: import("../sim/dex-moves").MoveDataTable = {
   octazooka: {
     num: 190,
     accuracy: 85,
-    basePower: 65,
+    basePower: 85,
     category: "Special",
     isNonstandard: "Past",
     name: "Octazooka",
@@ -14733,7 +14792,7 @@ export const Moves: import("../sim/dex-moves").MoveDataTable = {
   originpulse: {
     num: 618,
     accuracy: 85,
-    basePower: 110,
+    basePower: 120,
     category: "Special",
     name: "Origin Pulse",
     pp: 10,
@@ -14763,7 +14822,7 @@ export const Moves: import("../sim/dex-moves").MoveDataTable = {
   overdrive: {
     num: 786,
     accuracy: 100,
-    basePower: 80,
+    basePower: 100,
     category: "Special",
     name: "Overdrive",
     pp: 10,
@@ -14825,7 +14884,7 @@ export const Moves: import("../sim/dex-moves").MoveDataTable = {
   paraboliccharge: {
     num: 570,
     accuracy: 100,
-    basePower: 65,
+    basePower: 70,
     category: "Special",
     name: "Parabolic Charge",
     pp: 20,
@@ -15253,7 +15312,7 @@ export const Moves: import("../sim/dex-moves").MoveDataTable = {
   poisonsting: {
     num: 40,
     accuracy: 100,
-    basePower: 15,
+    basePower: 25,
     category: "Physical",
     name: "Poison Sting",
     pp: 35,
@@ -15361,7 +15420,7 @@ export const Moves: import("../sim/dex-moves").MoveDataTable = {
   pounce: {
     num: 884,
     accuracy: 100,
-    basePower: 50,
+    basePower: 60,
     category: "Physical",
     name: "Pounce",
     pp: 20,
@@ -15433,7 +15492,7 @@ export const Moves: import("../sim/dex-moves").MoveDataTable = {
   powdersnow: {
     num: 181,
     accuracy: 100,
-    basePower: 40,
+    basePower: 50,
     category: "Special",
     name: "Powder Snow",
     pp: 25,
@@ -16375,7 +16434,7 @@ export const Moves: import("../sim/dex-moves").MoveDataTable = {
   rage: {
     num: 99,
     accuracy: 100,
-    basePower: 20,
+    basePower: 30,
     category: "Physical",
     isNonstandard: "Past",
     name: "Rage",
@@ -16616,7 +16675,7 @@ export const Moves: import("../sim/dex-moves").MoveDataTable = {
   razorleaf: {
     num: 75,
     accuracy: 95,
-    basePower: 55,
+    basePower: 60,
     category: "Physical",
     name: "Razor Leaf",
     pp: 25,
@@ -16650,7 +16709,7 @@ export const Moves: import("../sim/dex-moves").MoveDataTable = {
   razorwind: {
     num: 13,
     accuracy: 100,
-    basePower: 80,
+    basePower: 75,
     category: "Special",
     isNonstandard: "Past",
     name: "Razor Wind",
@@ -17184,7 +17243,7 @@ export const Moves: import("../sim/dex-moves").MoveDataTable = {
   rockslide: {
     num: 157,
     accuracy: 90,
-    basePower: 75,
+    basePower: 80,
     category: "Physical",
     name: "Rock Slide",
     pp: 10,
@@ -17730,7 +17789,7 @@ export const Moves: import("../sim/dex-moves").MoveDataTable = {
   sappyseed: {
     num: 738,
     accuracy: 90,
-    basePower: 100,
+    basePower: 90,
     category: "Physical",
     isNonstandard: "LGPE",
     name: "Sappy Seed",
@@ -19022,7 +19081,7 @@ export const Moves: import("../sim/dex-moves").MoveDataTable = {
   skyuppercut: {
     num: 327,
     accuracy: 90,
-    basePower: 85,
+    basePower: 65,
     category: "Physical",
     isNonstandard: "Past",
     name: "Sky Uppercut",
@@ -19199,7 +19258,7 @@ export const Moves: import("../sim/dex-moves").MoveDataTable = {
   smackdown: {
     num: 479,
     accuracy: 100,
-    basePower: 50,
+    basePower: 60,
     category: "Physical",
     name: "Smack Down",
     pp: 15,
@@ -19265,7 +19324,7 @@ export const Moves: import("../sim/dex-moves").MoveDataTable = {
   smellingsalts: {
     num: 265,
     accuracy: 100,
-    basePower: 70,
+    basePower: 60,
     basePowerCallback(pokemon, target, move) {
       if (target.status === "par") {
         this.debug("BP doubled on paralyzed target");
@@ -19415,7 +19474,7 @@ export const Moves: import("../sim/dex-moves").MoveDataTable = {
   snore: {
     num: 173,
     accuracy: 100,
-    basePower: 50,
+    basePower: 40,
     category: "Special",
     name: "Snore",
     pp: 15,
@@ -19490,7 +19549,7 @@ export const Moves: import("../sim/dex-moves").MoveDataTable = {
   solarbeam: {
     num: 76,
     accuracy: 100,
-    basePower: 120,
+    basePower: 140,
     category: "Special",
     name: "Solar Beam",
     pp: 10,
@@ -19540,7 +19599,7 @@ export const Moves: import("../sim/dex-moves").MoveDataTable = {
   solarblade: {
     num: 669,
     accuracy: 100,
-    basePower: 125,
+    basePower: 130,
     category: "Physical",
     name: "Solar Blade",
     pp: 10,
@@ -19797,7 +19856,7 @@ export const Moves: import("../sim/dex-moves").MoveDataTable = {
   spikecannon: {
     num: 131,
     accuracy: 100,
-    basePower: 20,
+    basePower: 25,
     category: "Physical",
     isNonstandard: "Past",
     name: "Spike Cannon",
@@ -20532,7 +20591,7 @@ export const Moves: import("../sim/dex-moves").MoveDataTable = {
   strangesteam: {
     num: 790,
     accuracy: 95,
-    basePower: 90,
+    basePower: 95,
     category: "Special",
     name: "Strange Steam",
     pp: 10,
@@ -20548,7 +20607,7 @@ export const Moves: import("../sim/dex-moves").MoveDataTable = {
   strength: {
     num: 70,
     accuracy: 100,
-    basePower: 80,
+    basePower: 100,
     category: "Physical",
     name: "Strength",
     pp: 15,
@@ -21599,7 +21658,7 @@ export const Moves: import("../sim/dex-moves").MoveDataTable = {
   technoblast: {
     num: 546,
     accuracy: 100,
-    basePower: 120,
+    basePower: 85,
     category: "Special",
     isNonstandard: "Past",
     name: "Techno Blast",
@@ -21618,7 +21677,7 @@ export const Moves: import("../sim/dex-moves").MoveDataTable = {
   tectonicrage: {
     num: 630,
     accuracy: true,
-    basePower: 1,
+    basePower: 30,
     category: "Physical",
     isNonstandard: "Past",
     name: "Tectonic Rage",
@@ -22185,7 +22244,7 @@ export const Moves: import("../sim/dex-moves").MoveDataTable = {
   thundershock: {
     num: 84,
     accuracy: 100,
-    basePower: 40,
+    basePower: 45,
     category: "Special",
     name: "Thunder Shock",
     pp: 30,
@@ -22731,8 +22790,31 @@ export const Moves: import("../sim/dex-moves").MoveDataTable = {
   },
   tripledive: {
     num: 865,
+    accuracy: 90,
+    basePower: 20,
+    category: "Physical",
+    name: "Triple Dive",
+    pp: 10,
+    priority: 0,
+    flags: { contact: 1, protect: 1, mirror: 1, metronome: 1 },
+    multihit: 3,
+    onBasePower(basePower, source, target, move) {
+      // move.hit = 1, 2 o 3 dependiendo del golpe
+      if (move.hit === 2) {
+        return this.chainModify(2); // 20 × 2 = 40
+      }
+      if (move.hit === 3) {
+        return this.chainModify(3); // 20 × 3 = 60
+      }
+    },
+    secondary: null,
+    target: "normal",
+    type: "Water",
+  },
+  /*tripledive: {
+    num: 865,
     accuracy: 95,
-    basePower: 30,
+    basePower: 20,
     category: "Physical",
     name: "Triple Dive",
     pp: 10,
@@ -22742,7 +22824,7 @@ export const Moves: import("../sim/dex-moves").MoveDataTable = {
     secondary: null,
     target: "normal",
     type: "Water",
-  },
+  },*/
   triplekick: {
     num: 167,
     accuracy: 90,
@@ -22887,7 +22969,7 @@ export const Moves: import("../sim/dex-moves").MoveDataTable = {
   twister: {
     num: 239,
     accuracy: 100,
-    basePower: 40,
+    basePower: 60,
     category: "Special",
     name: "Twister",
     pp: 20,
@@ -23206,7 +23288,7 @@ export const Moves: import("../sim/dex-moves").MoveDataTable = {
   wakeupslap: {
     num: 358,
     accuracy: 100,
-    basePower: 70,
+    basePower: 60,
     basePowerCallback(pokemon, target, move) {
       if (target.status === "slp" || target.hasAbility("comatose")) {
         this.debug("BP doubled on sleeping target");
@@ -23248,7 +23330,7 @@ export const Moves: import("../sim/dex-moves").MoveDataTable = {
   watergun: {
     num: 55,
     accuracy: 100,
-    basePower: 40,
+    basePower: 45,
     category: "Special",
     name: "Water Gun",
     pp: 25,
@@ -24018,7 +24100,7 @@ export const Moves: import("../sim/dex-moves").MoveDataTable = {
   zenheadbutt: {
     num: 428,
     accuracy: 90,
-    basePower: 80,
+    basePower: 90,
     category: "Physical",
     name: "Zen Headbutt",
     pp: 15,
