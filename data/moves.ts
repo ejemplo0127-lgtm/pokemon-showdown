@@ -39,7 +39,7 @@ export const Moves: import("../sim/dex-moves").MoveDataTable = {
     accuracy: 100,
     basePower: 15,
     category: "Physical",
-    name: "Triple Dive",
+    name: "Triple golpe",
     pp: 10,
     priority: 0,
     flags: { contact: 1, protect: 1, mirror: 1, metronome: 1 },
