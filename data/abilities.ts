@@ -56,46 +56,50 @@ export const Abilities: import("../sim/dex-abilities").AbilityDataTable = {
   podersabio: {
     name: "Poder Sabio",
     shortDesc:
-      "Potencia movimientos especiales x1.5 y fija el primer movimiento usado.",
+      "Potencia los movimientos especiales x1.5 y fija el primer movimiento usado.",
 
-    // Boost a movimientos especiales
+    // Boost de movimientos especiales
     onBasePower(basePower, attacker, defender, move) {
       if (move.category === "Special") {
         return this.chainModify(1.5);
       }
     },
 
-    // Guardamos el primer movimiento usado
+    // Guarda el primer movimiento usado
     onBeforeMove(attacker, defender, move) {
-      if (!attacker.volatiles["podersabio_lock"]) {
-        attacker.volatiles["podersabio_lock"] = { move: move.id };
+      const lock = attacker.volatiles["podersabio_lock"];
+
+      // Primera vez: guardamos el movimiento
+      if (!lock) {
+        attacker.addVolatile("podersabio_lock");
+        attacker.volatiles["podersabio_lock"].move = move.id;
+        return;
+      }
+
+      // Si ya existe lock y está intentando usar otro movimiento
+      if (move.id !== lock.move) {
+        this.add("-fail", attacker, "move: Poder Sabio");
+        attacker.queue.cancelAction(attacker);
+
+        // Forzar el movimiento bloqueado
+        this.queue.unshift({
+          choice: "move",
+          pokemon: attacker,
+          moveid: lock.move,
+          targetLoc: 0,
+        });
+
+        return false; // evita crash
       }
     },
 
-    // Evita seleccionar otro movimiento después del primero
-    onDisableMove(pokemon) {
-      const lock = pokemon.volatiles["podersabio_lock"];
-      if (!lock) return;
-
-      for (const moveSlot of pokemon.moveSlots) {
-        if (moveSlot.id !== lock.move) {
-          pokemon.disableMove(moveSlot.id);
-        }
-      }
-    },
-
-    // Si por algún motivo pierde la habilidad, eliminamos el lock
+    // Limpia el bloqueo si pierde la habilidad
     onEnd(pokemon) {
       delete pokemon.volatiles["podersabio_lock"];
     },
 
-    // Si cambia de forma o habilidad y vuelve a obtener la habilidad, debe bloquear de nuevo
-    onStart(pokemon) {
-      // Nada aquí: bloqueo ocurre solo al mover por primera vez
-    },
-
     flags: {},
-    rating: 3.5,
+    rating: 4,
     num: -1010,
   },
   realeza: {
