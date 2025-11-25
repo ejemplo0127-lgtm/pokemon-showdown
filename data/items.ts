@@ -1,5 +1,12 @@
 export const Items: import("../sim/dex-items").ItemDataTable = {
   // Pokemon Añil
+  pelucaregia: {
+    name: "PelucaRegia",
+    spritenum: 25, // el icono que quieras
+    fling: { basePower: 30 },
+    num: -3001,
+    gen: 9,
+  },
   flappletunita: {
     name: "Flappletunita",
     spritenum: 576,

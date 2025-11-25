@@ -21744,4 +21744,20 @@ export const Pokedex: import("../sim/dex-species").SpeciesDataTable = {
 
     isNonstandard: "Custom",
   },
+  royaleon: {
+    num: -6001, // pon otro si ya usas este
+    name: "Royaleon",
+    types: ["Normal"],
+    gender: "N",
+    baseStats: { hp: 110, atk: 60, def: 95, spa: 130, spd: 65, spe: 65 },
+    abilities: { 0: "Realeza", H: "Adaptability" },
+    heightm: 1.0,
+    weightkg: 29.0,
+    color: "Blue",
+    prevo: "Eevee",
+    evoType: "useItem",
+    evoItem: "PelucaRegia",
+    eggGroups: ["Field"],
+    tier: "OU",
+  },
 };
