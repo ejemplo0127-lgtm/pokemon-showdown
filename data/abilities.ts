@@ -211,7 +211,7 @@ export const Abilities: import("../sim/dex-abilities").AbilityDataTable = {
         return this.chainModify([4915, 4096]);
     },
     flags: {},
-    name: "Piel Tétrica",
+    name: "Piel Maldita",
     shortDesc:
       "Transforma los movimientos de tipo normal en fantasma y los potencia un 20%",
     rating: 4,
