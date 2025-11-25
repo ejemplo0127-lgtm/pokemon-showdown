@@ -58,35 +58,45 @@ export const Abilities: import("../sim/dex-abilities").AbilityDataTable = {
     shortDesc:
       "Potencia movimientos especiales x1.5 y fija el primer movimiento usado.",
 
-    // Aumenta la potencia de movimientos especiales
+    // Boost a movimientos especiales
     onBasePower(basePower, attacker, defender, move) {
       if (move.category === "Special") {
         return this.chainModify(1.5);
       }
     },
-    // Emula el comportamiento de Choice Specs para bloquear movimientos
-    onStart(pokemon) {
-      // Aplica un efecto tipo choicelock si no lo tiene
-      if (!pokemon.volatiles["choicelock"]) {
-        pokemon.addVolatile("choicelock");
+
+    // Guardamos el primer movimiento usado
+    onBeforeMove(attacker, defender, move) {
+      if (!attacker.volatiles["podersabio_lock"]) {
+        attacker.volatiles["podersabio_lock"] = { move: move.id };
       }
     },
-    // Evita que el Pokémon seleccione un movimiento distinto
+
+    // Evita seleccionar otro movimiento después del primero
     onDisableMove(pokemon) {
-      if (!pokemon.volatiles["choicelock"]) return;
-      const lockedMove = pokemon.volatiles["choicelock"].move;
+      const lock = pokemon.volatiles["podersabio_lock"];
+      if (!lock) return;
+
       for (const moveSlot of pokemon.moveSlots) {
-        if (moveSlot.id !== lockedMove) {
+        if (moveSlot.id !== lock.move) {
           pokemon.disableMove(moveSlot.id);
         }
       }
     },
-    // Permite que el efecto se mantenga mientras la habilidad no se pierda
-    onBeforeMove(attacker, defender, move) {
-      if (attacker.volatiles["choicelock"]) {
-        attacker.volatiles["choicelock"].move = move.id;
-      }
+
+    // Si por algún motivo pierde la habilidad, eliminamos el lock
+    onEnd(pokemon) {
+      delete pokemon.volatiles["podersabio_lock"];
     },
+
+    // Si cambia de forma o habilidad y vuelve a obtener la habilidad, debe bloquear de nuevo
+    onStart(pokemon) {
+      // Nada aquí: bloqueo ocurre solo al mover por primera vez
+    },
+
+    flags: {},
+    rating: 3.5,
+    num: -1010,
   },
   realeza: {
     name: "Realeza",
@@ -143,7 +153,7 @@ export const Abilities: import("../sim/dex-abilities").AbilityDataTable = {
         return this.chainModify([4915, 4096]);
     },
     flags: {},
-    name: "Coleóptero",
+    name: "Coleoptero",
     shortDesc:
       "Transforma los movimientos de tipo normal en bicho y los potencia un 20%",
     rating: 4,
