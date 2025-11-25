@@ -43,22 +43,6 @@ export const Abilities: import("../sim/dex-abilities").AbilityDataTable = {
   // --------------------------------------------------------
   // 🌿 Nuevas Habilidades
   // --------------------------------------------------------
-  /* illuminate: {
-    name: "illuminate",
-    shortDesc:
-      "Al entrar, baja la Precisión de los rivales en 1 nivel (no afecta si tienen Sustituto).",
-
-    onStart(pokemon) {
-      for (const target of pokemon.side.foe.active) {
-        if (!target || target.fainted) continue;
-
-        // No funciona si el objetivo está detrás de Sustituto
-        if (target.volatiles["substitute"]) continue;
-
-        this.boost({ accuracy: -1 }, target, pokemon, null, true);
-      }
-    },
-  },*/
 
   espanto: {
     name: "Espanto",
@@ -131,30 +115,6 @@ export const Abilities: import("../sim/dex-abilities").AbilityDataTable = {
       }
     },
   },
-
-  /*  parentalbond: {
-    inherit: true,
-    name: "Parental Bond",
-    shortDesc:
-      "Golpea dos veces; el segundo golpe hace el 25% y conserva efectos.",
-
-    onPrepareHit(source, target, move) {
-      if (move.multihit || move.flags["charge"] || move.isZ || move.isMax)
-        return;
-      move.multihit = 2;
-      this.add("-ability", source, "Parental Bond");
-    },
-
-    onHit(target, source, move) {
-      // Se mantienen efectos en ambos golpes
-    },
-
-    onModifyDamage(damage, source, target, move) {
-      if (move.hit > 1) {
-        return this.chainModify(0.5);
-      }
-    },
-  },*/
   coleoptero: {
     onModifyTypePriority: -1,
     onModifyType(move, pokemon) {
@@ -373,19 +333,135 @@ export const Abilities: import("../sim/dex-abilities").AbilityDataTable = {
     num: -1001,
   },
   albino: {
-    name: "Albino",
-    shortDesc: "Potencia los movimientos de tipo Hielo en un 30%.",
-    desc: "Aumenta el poder de los movimientos de tipo Hielo en un 30%.",
-
-    onBasePowerPriority: 28,
-    onBasePower(basePower, attacker, defender, move) {
+    onModifyAtkPriority: 5,
+    onModifyAtk(atk, attacker, defender, move) {
       if (move.type === "Ice") {
         this.debug("Albino boost");
-        return this.chainModify(1.3);
+        return this.chainModify(1.5);
       }
     },
-    rating: 3,
+    onModifySpAPriority: 5,
+    onModifySpA(atk, attacker, defender, move) {
+      if (move.type === "Ice") {
+        this.debug("Albino boost");
+        return this.chainModify(1.5);
+      }
+    },
+    flags: {},
+    name: "Albino",
+    rating: 3.5,
     num: -1002,
+  },
+  floracion: {
+    onModifyAtkPriority: 5,
+    onModifyAtk(atk, attacker, defender, move) {
+      if (move.type === "Grass") {
+        this.debug("Floracion boost");
+        return this.chainModify(1.5);
+      }
+    },
+    onModifySpAPriority: 5,
+    onModifySpA(atk, attacker, defender, move) {
+      if (move.type === "Grass") {
+        this.debug("Floracion boost");
+        return this.chainModify(1.5);
+      }
+    },
+    flags: {},
+    name: "Floración",
+    rating: 3.5,
+  },
+  inflamable: {
+    onModifyAtkPriority: 5,
+    onModifyAtk(atk, attacker, defender, move) {
+      if (move.type === "Fire") {
+        this.debug("Inflamable boost");
+        return this.chainModify(1.5);
+      }
+    },
+    onModifySpAPriority: 5,
+    onModifySpA(atk, attacker, defender, move) {
+      if (move.type === "Fire") {
+        this.debug("Inflamable boost");
+        return this.chainModify(1.5);
+      }
+    },
+    flags: {},
+    name: "Inflamable",
+    rating: 3.5,
+  },
+  podergelido: {
+    onStart(pokemon) {
+      if (this.field.isWeather("snowscape")) {
+        this.add("-ability", pokemon, "Poder Gélido");
+        this.boost({ atk: 1, spa: 1, spe: 1 }, pokemon, pokemon);
+      }
+    },
+
+    onWeatherChange(pokemon, source, weather) {
+      if (weather.id === "snowscape") {
+        this.add("-ability", pokemon, "Poder Gélido");
+        this.boost({ atk: 1, spa: 1, spe: 1 }, pokemon, pokemon);
+      }
+    },
+
+    flags: {},
+    name: "Poder Gélido",
+    shortDesc:
+      "En clima nevado, aumenta el ataque, ataque especial y velocidad.",
+    desc: "Cuando el clima es nevado, el Pokémon aumenta su Ataque, Ataque Especial y Velocidad en un nivel al entrar en combate o cuando empieza la nieve. Es inmune al daño del clima nevado.",
+    rating: 3,
+  },
+  camorrista: {
+    onBasePower(basePower, attacker, defender, move) {
+      // Forzamos a TS a aceptar flags custom
+      const flags = move.flags as any;
+
+      if (flags.kick) {
+        this.debug("Camorrista boost");
+        return this.chainModify([4915, 4096]); // ~20% igual que Iron Fist
+      }
+    },
+    flags: {},
+    name: "Camorrista",
+    rating: 3,
+  },
+  tintineo: {
+    name: "Tintineo",
+    shortDesc:
+      "Al entrar, cura los estados del equipo. Los movs. de sonido pasan a ser Psíquicos y ganan un 20% más de potencia.",
+    desc: "Cuando el usuario entra en combate, repica una campana que elimina los problemas de estado de todos los Pokémon del equipo. Además, los movimientos con la flag de sonido cambian a tipo Psíquico y aumentan su potencia en un 20%.",
+
+    // Cura estados del equipo al entrar al combate
+    onStart(pokemon) {
+      this.add("-ability", pokemon, "Tintineo");
+      for (const ally of pokemon.side.pokemon) {
+        if (ally.status) {
+          ally.cureStatus();
+        }
+      }
+    },
+
+    // Convierte movimientos sonoros en Psíquico
+    onModifyMove(move, attacker, defender) {
+      const flags = move.flags as any;
+      if (flags.sound) {
+        move.type = "Psychic";
+      }
+    },
+
+    // Aumenta la potencia de movimientos de sonido
+    onBasePowerPriority: 23,
+    onBasePower(basePower, attacker, defender, move) {
+      const flags = move.flags as any;
+      if (flags.sound) {
+        this.debug("Tintineo sonido +20%");
+        return this.chainModify([4915, 4096]); // ~20% power boost
+      }
+    },
+
+    flags: {},
+    rating: 4,
   },
   adaptability: {
     onModifySTAB(stab, source, target, move) {

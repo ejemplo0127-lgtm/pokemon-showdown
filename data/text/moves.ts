@@ -4,7 +4,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
     desc: "Has a very high chance for a critical hit.",
     shortDesc: "Very high critical hit ratio.",
   },
-  atrapamoscas: {
+  atrapabicho: {
     name: "Atrapabicho",
     desc: "Muerde con unas fauces eficaces contra los Pokémon Bicho",
     shortDesc: "Super eficaz contra bichos",
