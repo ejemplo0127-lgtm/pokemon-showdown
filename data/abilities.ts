@@ -54,23 +54,30 @@ export const Abilities: import("../sim/dex-abilities").AbilityDataTable = {
     },
   },
   podersabio: {
+    name: "Poder Sabio",
+    shortDesc:
+      "Potencia ataques especiales x1.5 y te fija al primer ataque usado.",
+    rating: 4.5,
+    num: 10050,
+    flags: {}, // ← NECESARIO
+
     onStart(pokemon) {
       pokemon.abilityState.choiceLock = "";
     },
+
     onBeforeMove(pokemon, target, move) {
       if (move.isZOrMaxPowered || move.id === "struggle") return;
       if (
         pokemon.abilityState.choiceLock &&
         pokemon.abilityState.choiceLock !== move.id
       ) {
-        // Falla sin gastar PP
         this.addMove("move", pokemon, move.name);
         this.attrLastMove("[still]");
-        this.debug("Disabled by Poder Sabio");
         this.add("-fail", pokemon);
         return false;
       }
     },
+
     onModifyMove(move, pokemon) {
       if (
         pokemon.abilityState.choiceLock ||
@@ -78,18 +85,27 @@ export const Abilities: import("../sim/dex-abilities").AbilityDataTable = {
         move.id === "struggle"
       )
         return;
-      // Registra el primer movimiento usado
       pokemon.abilityState.choiceLock = move.id;
     },
-    onModifySpAPriority: 1,
-    onModifySpA(spa, pokemon) {
-      if (pokemon.volatiles["dynamax"]) return;
-      this.debug("Poder Sabio SpA Boost");
-      return this.chainModify(1.5); // Aumenta la potencia especial
+
+    onBasePower(basePower, attacker, defender, move) {
+      if (attacker.volatiles["dynamax"]) return;
+      if (move.category === "Special") return this.chainModify(1.5);
     },
+
     onDisableMove(pokemon) {
       if (!pokemon.abilityState.choiceLock) return;
       if (pokemon.volatiles["dynamax"]) return;
+
+      let hasUsableMove = false;
+      for (const moveSlot of pokemon.moveSlots) {
+        if (moveSlot.id === pokemon.abilityState.choiceLock) {
+          hasUsableMove = true;
+          break;
+        }
+      }
+      if (!hasUsableMove) return;
+
       for (const moveSlot of pokemon.moveSlots) {
         if (moveSlot.id !== pokemon.abilityState.choiceLock) {
           pokemon.disableMove(
@@ -100,16 +116,12 @@ export const Abilities: import("../sim/dex-abilities").AbilityDataTable = {
         }
       }
     },
+
     onEnd(pokemon) {
       pokemon.abilityState.choiceLock = "";
     },
-    flags: {},
-    name: "Poder Sabio",
-    shortDesc:
-      "Potencia movimientos especiales x1.5 y fija el primer movimiento usado.",
-    rating: 4.5,
-    num: 10050, // pon el número que quieras
   },
+
   realeza: {
     name: "Realeza",
     shortDesc:
