@@ -181,9 +181,8 @@ export const Abilities: import("../sim/dex-abilities").AbilityDataTable = {
     shortDesc:
       "Transforma los movimientos de tipo normal en bicho y los potencia un 20%",
     rating: 4,
-    num: -1005,
   },
-  pielmaldita: {
+  cursedskin: {
     onModifyTypePriority: -1,
     onModifyType(move, pokemon) {
       const noModifyType = [
@@ -211,13 +210,13 @@ export const Abilities: import("../sim/dex-abilities").AbilityDataTable = {
         return this.chainModify([4915, 4096]);
     },
     flags: {},
-    name: "Piel Maldita",
+    name: "Cursed Skin",
     shortDesc:
       "Transforma los movimientos de tipo normal en fantasma y los potencia un 20%",
     rating: 4,
-    num: -1004,
+    num: -1104,
   },
-  pielelectrica: {
+  electricskin: {
     onModifyTypePriority: -1,
     onModifyType(move, pokemon) {
       const noModifyType = [
@@ -245,11 +244,11 @@ export const Abilities: import("../sim/dex-abilities").AbilityDataTable = {
         return this.chainModify([4915, 4096]);
     },
     flags: {},
-    name: "Piel eléctrica",
+    name: "Electric Skin",
     shortDesc:
-      "Transforma los movimientos de tipo normal en eléctrico y los potencia un 20%",
+      "Transforma los movimientos de tipo normal en electrico y los potencia un 20%",
     rating: 4,
-    num: -1003,
+    num: -1100,
   },
   pielhelada: {
     onModifyTypePriority: -1,
@@ -425,25 +424,42 @@ export const Abilities: import("../sim/dex-abilities").AbilityDataTable = {
     rating: 3.5,
   },
   podergelido: {
-    onStart(pokemon) {
+    onStart(pokemon: any) {
       if (this.field.isWeather("snowscape")) {
-        this.add("-ability", pokemon, "Poder Gélido");
+        this.add("-ability", pokemon, "Poder Gelido");
         this.boost({ atk: 1, spa: 1, spe: 1 }, pokemon, pokemon);
+        pokemon.addVolatile("podergelido");
       }
     },
 
-    onWeatherChange(pokemon, source, weather) {
+    onWeatherChange(target: any, source: any, weather: any) {
       if (weather.id === "snowscape") {
-        this.add("-ability", pokemon, "Poder Gélido");
-        this.boost({ atk: 1, spa: 1, spe: 1 }, pokemon, pokemon);
+        if (!target.volatiles["podergelido"]) {
+          this.add("-ability", target, "Poder Gelido");
+          this.boost({ atk: 1, spa: 1, spe: 1 }, target, target);
+          target.addVolatile("podergelido");
+        }
+      } else {
+        if (target.volatiles["podergelido"]) {
+          target.removeVolatile("podergelido");
+
+          // SOLO revertimos los boosts que dio la habilidad
+          const revert: any = {};
+          if (target.boosts.atk > 0) revert.atk = -1;
+          if (target.boosts.spa > 0) revert.spa = -1;
+          if (target.boosts.spe > 0) revert.spe = -1;
+
+          if (Object.keys(revert).length > 0) {
+            this.boost(revert, target, target);
+          }
+        }
       }
     },
 
     flags: {},
-    name: "Poder Gélido",
+    name: "Poder Gelido",
     shortDesc:
-      "En clima nevado, aumenta el ataque, ataque especial y velocidad.",
-    desc: "Cuando el clima es nevado, el Pokémon aumenta su Ataque, Ataque Especial y Velocidad en un nivel al entrar en combate o cuando empieza la nieve. Es inmune al daño del clima nevado.",
+      "Mientras haya nieve, +1 Atk/SpA/Spe al entrar o comenzar la nieve.",
     rating: 3,
   },
   camorrista: {
