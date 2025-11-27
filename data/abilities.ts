@@ -360,7 +360,6 @@ export const Abilities: import("../sim/dex-abilities").AbilityDataTable = {
 
     name: "Acometida",
     rating: 3.5,
-    num: -1001,
   },
 
   /*acometida: {
@@ -374,7 +373,7 @@ export const Abilities: import("../sim/dex-abilities").AbilityDataTable = {
       this.add("-ability", pokemon, "Acometida");
       this.add(
         "-message",
-        `${pokemon.name} se prepara para lanzarse con acometida!`
+        `${pokemon.name} se prepara para lanzarse con Juanda!`
       );
     },
 
