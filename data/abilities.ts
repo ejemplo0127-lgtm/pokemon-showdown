@@ -321,6 +321,39 @@ export const Abilities: import("../sim/dex-abilities").AbilityDataTable = {
   acometida: {
     name: "Acometida",
     shortDesc:
+      "En su primer turno en combate obtiene +50% Velocidad y +20% Ataque.",
+
+    // Cuando el Pokémon entra en el campo
+    onStart(pokemon) {
+      pokemon.addVolatile("acometida");
+      this.add("-ability", pokemon, "Acometida");
+      this.add(
+        "-message",
+        `${pokemon.name} se prepara para lanzarse con acometida!`
+      );
+    },
+
+    condition: {
+      // No usamos duration, se quitará al intentar mover
+
+      onModifyAtk(atk, pokemon) {
+        return this.chainModify(1.2); // +20% Atk
+      },
+
+      onModifySpe(spe, pokemon) {
+        return this.chainModify(1.5); // +50% Spe
+      },
+
+      // Cuando intenta usar su primer movimiento
+      onBeforeMove(pokemon, target, move) {
+        pokemon.removeVolatile("acometida");
+        this.add("-message", `${pokemon.name} ya no está acometiendo.`);
+      },
+    },
+  },
+  /*acometida: {
+    name: "Acometida",
+    shortDesc:
       "Al entrar en combate, durante su primer turno obtiene +50% Velocidad y +20% Ataque.",
 
     // Cuando el Pokémon entra en el campo
@@ -348,7 +381,7 @@ export const Abilities: import("../sim/dex-abilities").AbilityDataTable = {
         this.add("-message", `${pokemon.name} ya no está acometiendo.`);
       },
     },
-  },
+  },*/
   sobrecarga: {
     name: "Sobrecarga",
     shortDesc:
