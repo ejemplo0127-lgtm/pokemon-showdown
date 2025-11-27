@@ -323,10 +323,7 @@ export const Abilities: import("../sim/dex-abilities").AbilityDataTable = {
     shortDesc: "En su primer turno real obtiene +50% Velocidad y +20% Ataque.",
 
     onStart(pokemon) {
-      // Se activa al entrar al campo SIEMPRE
       pokemon.addVolatile("acometida");
-
-      // Marcamos que aún NO ha tenido un turno real
       pokemon.volatiles.acometida.turnsActive = 0;
 
       this.add("-ability", pokemon, "Acometida");
@@ -337,24 +334,18 @@ export const Abilities: import("../sim/dex-abilities").AbilityDataTable = {
     },
 
     condition: {
-      // +20% Atk y +50% Spe mientras esté acometiendo
-      onModifyAtk(atk) {
-        return this.chainModify(1.2);
-      },
-      onModifySpe(spe) {
-        return this.chainModify(1.5);
+      // 🔥 Aquí modificamos los stats VISUALES
+      onModifyStats(stats, pokemon) {
+        stats.atk = this.modify(stats.atk, 1.2); // +20% Atk
+        stats.spe = this.modify(stats.spe, 1.5); // +50% Spe
       },
 
-      // Cada turno residual aumenta el contador si el Pokémon está activo
+      // Contador de turno real
       onResidual(pokemon) {
-        const data = pokemon.volatiles.acometida;
-        if (!data) return;
-
-        // Solo empieza a contar cuando realmente YA está en campo
-        data.turnsActive++;
+        pokemon.volatiles.acometida.turnsActive++;
       },
 
-      // Cuando va a mover por primera vez después de haber estado activo 1 turno
+      // Al intentar mover después del primer turno real desaparece
       onBeforeMove(pokemon) {
         const data = pokemon.volatiles.acometida;
         if (!data) return;
