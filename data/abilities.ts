@@ -320,12 +320,15 @@ export const Abilities: import("../sim/dex-abilities").AbilityDataTable = {
   },
   acometida: {
     name: "Acometida",
-    shortDesc:
-      "En su primer turno en combate obtiene +50% Velocidad y +20% Ataque.",
+    shortDesc: "En su primer turno real obtiene +50% Velocidad y +20% Ataque.",
 
-    // Cuando el Pokémon entra en el campo
     onStart(pokemon) {
+      // Se activa al entrar al campo SIEMPRE
       pokemon.addVolatile("acometida");
+
+      // Marcamos que aún NO ha tenido un turno real
+      pokemon.volatiles.acometida.turnsActive = 0;
+
       this.add("-ability", pokemon, "Acometida");
       this.add(
         "-message",
@@ -334,23 +337,36 @@ export const Abilities: import("../sim/dex-abilities").AbilityDataTable = {
     },
 
     condition: {
-      // No usamos duration, se quitará al intentar mover
-
-      onModifyAtk(atk, pokemon) {
-        return this.chainModify(1.2); // +20% Atk
+      // +20% Atk y +50% Spe mientras esté acometiendo
+      onModifyAtk(atk) {
+        return this.chainModify(1.2);
+      },
+      onModifySpe(spe) {
+        return this.chainModify(1.5);
       },
 
-      onModifySpe(spe, pokemon) {
-        return this.chainModify(1.5); // +50% Spe
+      // Cada turno residual aumenta el contador si el Pokémon está activo
+      onResidual(pokemon) {
+        const data = pokemon.volatiles.acometida;
+        if (!data) return;
+
+        // Solo empieza a contar cuando realmente YA está en campo
+        data.turnsActive++;
       },
 
-      // Cuando intenta usar su primer movimiento
-      onBeforeMove(pokemon, target, move) {
-        pokemon.removeVolatile("acometida");
-        this.add("-message", `${pokemon.name} ya no está acometiendo.`);
+      // Cuando va a mover por primera vez después de haber estado activo 1 turno
+      onBeforeMove(pokemon) {
+        const data = pokemon.volatiles.acometida;
+        if (!data) return;
+
+        if (data.turnsActive >= 1) {
+          pokemon.removeVolatile("acometida");
+          this.add("-message", `${pokemon.name} ya no está acometiendo.`);
+        }
       },
     },
   },
+
   /*acometida: {
     name: "Acometida",
     shortDesc:
