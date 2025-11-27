@@ -334,18 +334,17 @@ export const Abilities: import("../sim/dex-abilities").AbilityDataTable = {
     },
 
     condition: {
-      // 🔥 Aquí modificamos los stats VISUALES
-      onModifyStats(stats, pokemon) {
-        stats.atk = this.modify(stats.atk, 1.2); // +20% Atk
-        stats.spe = this.modify(stats.spe, 1.5); // +50% Spe
+      onModifyAtk(atk, pokemon) {
+        return this.chainModify(1.2); // +20%
+      },
+      onModifySpe(spe, pokemon) {
+        return this.chainModify(1.5); // +50%
       },
 
-      // Contador de turno real
       onResidual(pokemon) {
         pokemon.volatiles.acometida.turnsActive++;
       },
 
-      // Al intentar mover después del primer turno real desaparece
       onBeforeMove(pokemon) {
         const data = pokemon.volatiles.acometida;
         if (!data) return;
