@@ -319,42 +319,48 @@ export const Abilities: import("../sim/dex-abilities").AbilityDataTable = {
     num: -1000,
   },
   acometida: {
-    name: "Acometida",
-    shortDesc: "En su primer turno real obtiene +50% Velocidad y +20% Ataque.",
-
     onStart(pokemon) {
-      pokemon.addVolatile("acometida");
-      pokemon.volatiles.acometida.turnsActive = 0;
-
-      this.add("-ability", pokemon, "Acometida");
+      this.add("-start", pokemon, "ability: Acometida");
       this.add(
-        "-message",
-        `${pokemon.name} se prepara para lanzarse con acometida!`
+        "message",
+        `${pokemon.name} se prepara para lanzarse con Juanda!`
       );
+      pokemon.addVolatile("acometidaBuff");
     },
 
     condition: {
+      // Buff
       onModifyAtk(atk, pokemon) {
-        return this.chainModify(1.2); // +20%
+        if (pokemon.volatiles["acometidaBuff"]) {
+          return this.chainModify(1.2);
+        }
       },
       onModifySpe(spe, pokemon) {
-        return this.chainModify(1.5); // +50%
+        if (pokemon.volatiles["acometidaBuff"]) {
+          return this.chainModify(1.5);
+        }
       },
 
+      // Cuando termine su primer turno REAL como activo → se apaga
+      onEnd(pokemon) {}, // necesario para no romper el motor
+
+      onResidualOrder: 10,
       onResidual(pokemon) {
-        pokemon.volatiles.acometida.turnsActive++;
-      },
-
-      onBeforeMove(pokemon) {
-        const data = pokemon.volatiles.acometida;
+        const data = pokemon.volatiles["acometidaBuff"];
         if (!data) return;
 
-        if (data.turnsActive >= 1) {
-          pokemon.removeVolatile("acometida");
-          this.add("-message", `${pokemon.name} ya no está acometiendo.`);
+        // Si activeTurns == 0 → es el turno en el que ha entrado → NO se quita aún
+        // Si activeTurns >= 1 → ya completó un turno real → quitar buff
+        if (pokemon.activeTurns >= 1) {
+          this.add("message", `${pokemon.name} ya no está acometiendo.`);
+          pokemon.removeVolatile("acometidaBuff");
         }
       },
     },
+
+    name: "Acometida",
+    rating: 3.5,
+    num: -1001,
   },
 
   /*acometida: {
