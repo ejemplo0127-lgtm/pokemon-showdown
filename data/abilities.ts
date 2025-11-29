@@ -43,7 +43,39 @@ export const Abilities: import("../sim/dex-abilities").AbilityDataTable = {
   // --------------------------------------------------------
   // 🌿 Nuevas Habilidades
   // --------------------------------------------------------
+  acometida: {
+    onStart(pokemon) {
+      // Siempre se activa al entrar al campo (inicio o cambio)
+      this.add("-start", pokemon, "ability: Acometida");
+      this.effectState.active = true;
+    },
 
+    // Desactivar justo antes de su primer movimiento efectivo
+    onBeforeMove(pokemon) {
+      if (this.effectState.active) {
+        this.add("-end", pokemon, "ability: Acometida");
+        this.effectState.active = false;
+      }
+    },
+
+    // Boost de Ataque
+    onModifyAtk(atk, pokemon) {
+      if (this.effectState.active) {
+        return this.chainModify(1.2);
+      }
+    },
+
+    // Boost de Velocidad
+    onModifySpe(spe, pokemon) {
+      if (this.effectState.active) {
+        return this.chainModify(1.5);
+      }
+    },
+
+    flags: {},
+    name: "Acometida",
+    rating: 3,
+  },
   espanto: {
     name: "Espanto",
     shortDesc: "Baja el At. Esp. del rival en 1 nivel al entrar.",
@@ -318,82 +350,6 @@ export const Abilities: import("../sim/dex-abilities").AbilityDataTable = {
     rating: 4,
     num: -1000,
   },
-  /*
-  acometida: {
-    onStart(pokemon) {
-      this.add("-start", pokemon, "ability: Acometida");
-      this.add(
-        "message",
-        `${pokemon.name} se prepara para lanzarse con Juanda!`
-      );
-      pokemon.addVolatile("acometidaBuff");
-    },
-
-    condition: {
-      // Buff
-      onModifyAtk(atk, pokemon) {
-        if (pokemon.volatiles["acometidaBuff"]) {
-          return this.chainModify(1.2);
-        }
-      },
-      onModifySpe(spe, pokemon) {
-        if (pokemon.volatiles["acometidaBuff"]) {
-          return this.chainModify(1.5);
-        }
-      },
-
-      // Cuando termine su primer turno REAL como activo → se apaga
-      onEnd(pokemon) {}, // necesario para no romper el motor
-
-      onResidualOrder: 10,
-      onResidual(pokemon) {
-        const data = pokemon.volatiles["acometidaBuff"];
-        if (!data) return;
-
-        // Si activeTurns == 0 → es el turno en el que ha entrado → NO se quita aún
-        // Si activeTurns >= 1 → ya completó un turno real → quitar buff
-        if (pokemon.activeTurns >= 1) {
-          this.add("message", `${pokemon.name} ya no está acometiendo.`);
-          pokemon.removeVolatile("acometidaBuff");
-        }
-      },
-    },
-
-    name: "Acometida",
-    rating: 3.5,
-  },
-*/
-  /*acometida: {
-    name: "Acometida",
-    shortDesc:
-      "Al entrar en combate, durante su primer turno obtiene +50% Velocidad y +20% Ataque.",
-
-    // Cuando el Pokémon entra en el campo
-    onStart(pokemon) {
-      pokemon.addVolatile("acometida");
-      this.add("-ability", pokemon, "Acometida");
-      this.add(
-        "-message",
-        `${pokemon.name} se prepara para lanzarse con Juanda!`
-      );
-    },
-
-    // Definimos el estado volátil temporal que dura solo un turno
-    condition: {
-      duration: 1, // dura solo el primer turno activo
-
-      onModifyAtk(atk, pokemon) {
-        return this.chainModify(1.2); // +20% Ataque
-      },
-      onModifySpe(spe, pokemon) {
-        return this.chainModify(1.5); // +50% Velocidad
-      },
-
-      onEnd(pokemon) {
-        this.add("-message", `${pokemon.name} ya no está acometiendo.`);
-      },
-    },
-  },*/
   sobrecarga: {
     name: "Sobrecarga",
     shortDesc:
