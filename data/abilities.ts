@@ -318,6 +318,7 @@ export const Abilities: import("../sim/dex-abilities").AbilityDataTable = {
     rating: 4,
     num: -1000,
   },
+  /*
   acometida: {
     onStart(pokemon) {
       this.add("-start", pokemon, "ability: Acometida");
@@ -361,7 +362,7 @@ export const Abilities: import("../sim/dex-abilities").AbilityDataTable = {
     name: "Acometida",
     rating: 3.5,
   },
-
+*/
   /*acometida: {
     name: "Acometida",
     shortDesc:
