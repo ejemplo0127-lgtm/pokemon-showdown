@@ -45,6 +45,42 @@ export const Abilities: import("../sim/dex-abilities").AbilityDataTable = {
   // --------------------------------------------------------
   acometida: {
     onStart(pokemon) {
+      // Mostrar mensaje en batalla
+      this.add("-start", pokemon, "ability: Acometida");
+
+      // Marcar habilidad activa
+      pokemon.addVolatile("acometida");
+    },
+
+    onBeforeMove(pokemon) {
+      if (pokemon.volatiles["acometida"]) {
+        // Quitar efecto visual
+        this.add("-end", pokemon, "ability: Acometida");
+
+        // Desactivar efecto
+        pokemon.removeVolatile("acometida");
+      }
+    },
+
+    onModifyAtk(atk, pokemon) {
+      if (pokemon.volatiles["acometida"]) {
+        return this.chainModify(1.2);
+      }
+    },
+
+    onModifySpe(spe, pokemon) {
+      if (pokemon.volatiles["acometida"]) {
+        return this.chainModify(1.5);
+      }
+    },
+
+    name: "Acometida",
+    shortDesc: "Al entrar, Ataque x1.2 y Velocidad x1.5 hasta su primer turno.",
+    rating: 3,
+  },
+
+  /* acometida: {
+    onStart(pokemon) {
       // Siempre se activa al entrar al campo (inicio o cambio)
       this.add("-start", pokemon, "ability: Acometida");
       this.effectState.active = true;
@@ -75,7 +111,7 @@ export const Abilities: import("../sim/dex-abilities").AbilityDataTable = {
     flags: {},
     name: "Acometida",
     rating: 3,
-  },
+  },*/
   espanto: {
     name: "Espanto",
     shortDesc: "Baja el At. Esp. del rival en 1 nivel al entrar.",
