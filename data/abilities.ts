@@ -45,6 +45,34 @@ export const Abilities: import("../sim/dex-abilities").AbilityDataTable = {
   // --------------------------------------------------------
   acometida: {
     onStart(pokemon) {
+      this.add("-start", pokemon, "ability: Acometida");
+      pokemon.addVolatile("acometida");
+    },
+
+    // Se desactiva después de que el Pokémon haga su primer movimiento
+    onAfterMove(pokemon) {
+      if (pokemon.volatiles["acometida"]) {
+        this.add("-end", pokemon, "ability: Acometida");
+        pokemon.removeVolatile("acometida");
+      }
+    },
+
+    onModifyAtk(atk, pokemon) {
+      if (pokemon.volatiles["acometida"]) return this.chainModify(1.2);
+    },
+
+    onModifySpe(spe, pokemon) {
+      if (pokemon.volatiles["acometida"]) return this.chainModify(1.5);
+    },
+
+    name: "Acometida",
+    shortDesc: "Al entrar, Ataque x1.2 y Velocidad x1.5 hasta su primer turno.",
+    rating: 3,
+  },
+
+  /*
+  acometida: {
+    onStart(pokemon) {
       // Mostrar mensaje en batalla
       this.add("-start", pokemon, "ability: Acometida");
 
@@ -78,40 +106,7 @@ export const Abilities: import("../sim/dex-abilities").AbilityDataTable = {
     shortDesc: "Al entrar, Ataque x1.2 y Velocidad x1.5 hasta su primer turno.",
     rating: 3,
   },
-
-  /* acometida: {
-    onStart(pokemon) {
-      // Siempre se activa al entrar al campo (inicio o cambio)
-      this.add("-start", pokemon, "ability: Acometida");
-      this.effectState.active = true;
-    },
-
-    // Desactivar justo antes de su primer movimiento efectivo
-    onBeforeMove(pokemon) {
-      if (this.effectState.active) {
-        this.add("-end", pokemon, "ability: Acometida");
-        this.effectState.active = false;
-      }
-    },
-
-    // Boost de Ataque
-    onModifyAtk(atk, pokemon) {
-      if (this.effectState.active) {
-        return this.chainModify(1.2);
-      }
-    },
-
-    // Boost de Velocidad
-    onModifySpe(spe, pokemon) {
-      if (this.effectState.active) {
-        return this.chainModify(1.5);
-      }
-    },
-
-    flags: {},
-    name: "Acometida",
-    rating: 3,
-  },*/
+*/
   espanto: {
     name: "Espanto",
     shortDesc: "Baja el At. Esp. del rival en 1 nivel al entrar.",
