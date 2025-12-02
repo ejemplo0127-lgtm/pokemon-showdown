@@ -101,8 +101,8 @@ export const Conditions: import("../sim/dex-conditions").ConditionDataTable = {
   frz: {
     name: "frz",
     effectType: "Status",
+
     onStart(target, source, sourceEffect) {
-      // NO se activa por Flame Orb (no comprobamos ítems)
       if (sourceEffect && sourceEffect.effectType === "Ability") {
         this.add(
           "-status",
@@ -116,17 +116,50 @@ export const Conditions: import("../sim/dex-conditions").ConditionDataTable = {
       }
     },
 
-    // Reducir Ataque Especial igual que BRN reduce Ataque
     onModifySpA(spa, pokemon) {
       return this.chainModify(0.5);
     },
 
-    // Daño residual igual que BRN (1/16 del PS)
     onResidualOrder: 10,
     onResidual(pokemon) {
-      this.damage(pokemon.baseMaxhp / 16);
+      const effect = this.dex.conditions.get("frz") as any;
+      this.damage(pokemon.baseMaxhp / 16, pokemon, null, "frz");
     },
   },
+
+  /*frz: {
+    name: "frz",
+    effectType: "Status",
+    onStart(target, source, sourceEffect) {
+      if (sourceEffect && sourceEffect.effectType === "Ability") {
+        this.add(
+          "-status",
+          target,
+          "frz",
+          "[from] ability: " + sourceEffect.name,
+          `[of] ${source}`
+        );
+      } else {
+        this.add("-status", target, "frz");
+      }
+    },
+
+    // Reduce SpA igual que quemadura reduce Ataque
+    onModifySpA(spa, pokemon) {
+      return this.chainModify(0.5);
+    },
+
+    // Daño residual igual que BRN (1/16 PS)
+    onResidualOrder: 10,
+    onResidual(pokemon) {
+      // Aplica daño
+      this.damage(pokemon.baseMaxhp / 16);
+
+      // Mensaje personalizado (igual que burn pero adaptado)
+      this.add("-damage", pokemon, pokemon.getHealth(), "[from] frz", "[msg]");
+    },
+  },
+*/
   psn: {
     name: "psn",
     effectType: "Status",

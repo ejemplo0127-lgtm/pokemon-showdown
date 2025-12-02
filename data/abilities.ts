@@ -69,44 +69,6 @@ export const Abilities: import("../sim/dex-abilities").AbilityDataTable = {
     shortDesc: "Al entrar, Ataque x1.2 y Velocidad x1.5 hasta su primer turno.",
     rating: 3,
   },
-
-  /*
-  acometida: {
-    onStart(pokemon) {
-      // Mostrar mensaje en batalla
-      this.add("-start", pokemon, "ability: Acometida");
-
-      // Marcar habilidad activa
-      pokemon.addVolatile("acometida");
-    },
-
-    onBeforeMove(pokemon) {
-      if (pokemon.volatiles["acometida"]) {
-        // Quitar efecto visual
-        this.add("-end", pokemon, "ability: Acometida");
-
-        // Desactivar efecto
-        pokemon.removeVolatile("acometida");
-      }
-    },
-
-    onModifyAtk(atk, pokemon) {
-      if (pokemon.volatiles["acometida"]) {
-        return this.chainModify(1.2);
-      }
-    },
-
-    onModifySpe(spe, pokemon) {
-      if (pokemon.volatiles["acometida"]) {
-        return this.chainModify(1.5);
-      }
-    },
-
-    name: "Acometida",
-    shortDesc: "Al entrar, Ataque x1.2 y Velocidad x1.5 hasta su primer turno.",
-    rating: 3,
-  },
-*/
   espanto: {
     name: "Espanto",
     shortDesc: "Baja el At. Esp. del rival en 1 nivel al entrar.",
@@ -2959,7 +2921,7 @@ export const Abilities: import("../sim/dex-abilities").AbilityDataTable = {
         if (
           !this.singleEvent(
             "TryHit",
-            this.dex.getAbility("intimidate"),
+            this.dex.abilities.get("intimidate"), // ← CORRECTO EN LEGACY
             {},
             target,
             pokemon
@@ -2974,7 +2936,7 @@ export const Abilities: import("../sim/dex-abilities").AbilityDataTable = {
           activated = true;
         }
 
-        // Baja precisión al entrar (-1)
+        // Baja la precisión (-1)
         this.boost({ accuracy: -1 }, target, pokemon, null, true);
       }
     },
@@ -2984,6 +2946,7 @@ export const Abilities: import("../sim/dex-abilities").AbilityDataTable = {
     rating: 3,
     num: 35,
   },
+
   illusion: {
     onBeforeSwitchIn(pokemon) {
       pokemon.illusion = null;
